@@ -21,7 +21,7 @@ To include the audio player on a page you have to use the `[podcastaudio]` short
 
 To use the plugin you can add values to the header of your content files located at `/user/content/*`.
 
-#### Audio File (Compatibility)
+### Audio File (Compatibility)
 You can set the following values to a URL and MIME-type string to define the audio file:
 ```
 Enclosure:
@@ -36,7 +36,7 @@ AudioImage:
 
 **The `AudioImage` value is used before the `Image` value and the `podcast_image` configuration value.**
 
-#### Background Image (Compatibility)
+### Background Image (Compatibility)
 You can set the following value to a URL to define the background image of the audio player:
 ```
 Image:
