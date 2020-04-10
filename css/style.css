@@ -1,0 +1,27 @@
+.podcastaudio {
+  width : 100%;
+}
+
+.podcastaudio-image {
+  height   : 450px;
+  position : relative;
+}
+
+.podcastaudio audio {
+  width    : 100%;
+}
+
+.podcastaudio-image audio {
+  bottom   : 0;
+  position : absolute;
+}
+
+.podcastaudio-image img {
+  height          : 100%;
+  left            : 0;
+  object-fit      : fill;
+  object-position : center;
+  position        : absolute;
+  top             : 0;
+  width           : 100%;
+}
