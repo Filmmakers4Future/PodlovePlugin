@@ -56,7 +56,7 @@
           // insert the background image
           if (null !== $background) {
             $audioplayer .= fhtml("<div class=\"podcastaudio podcastaudio-image\">".NL.
-                                  "  <img src=\"%s\">".NL,
+                                  "  <img src=\"%s\" alt=\"podcast image\">".NL,
                                   $background);
           } else {
             $audioplayer .= fhtml("<div class=\"podcastaudio\">".NL);
