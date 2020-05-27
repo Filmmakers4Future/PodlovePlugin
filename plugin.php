@@ -161,7 +161,7 @@
           $divID =  "player_".substr(uniqid(rand(),1),0,15);
           
           # Create div for podlove webplayer
-          $podloveplayer = fhtml("<div id=\"%s\" class=\"align-content-center\"></div>".NL,
+          $podloveplayer = fhtml("<div id=\"%s\"></div>".NL,
                                $divID);
                     
           # Add player bootstrap code to array to add after body
