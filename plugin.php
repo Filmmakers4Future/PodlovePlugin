@@ -19,6 +19,7 @@
   class PodlovePlayerPlugin extends BaseSingleton implements Plugin {
 
     // CONSTANTS
+    // Content 
     
     const PODLOVEWEBPLAYER = "[podloveplayer]";
 
@@ -43,6 +44,22 @@
     const PODLOVE_CHAPTERLINKS = "podlove_chapterLinks";
     const PODLOVE_CHAPTERIMAGES = "podlove_chapterImages";
     
+    // CONSTANTS
+    // config 
+    const PODLOVE_CONFIG_FEED_URL = "PODLOVE_FEED_URL";
+    const PODLOVE_CONFIG_APPLE_PODCAST_ID = "PODLOVE_APPLE_PODCAST_ID";
+    const PODLOVE_CONFIG_CASTBOX_ID = "PODLOVE_CASTBOX_ID";
+    const PODLOVE_CONFIG_DEEZER_ID = "PODLOVE_DEEZER_ID";
+    const PODLOVE_CONFIG_SOUNDCLOUD_ID = "PODLOVE_SOUNDCLOUD_ID";
+    const PODLOVE_CONFIG_SPOTIFY_ID = "PODLOVE_SPOTIFY_ID";
+    const PODLOVE_CONFIG_STITCHER_ID = "PODLOVE_STITCHER_ID";
+    const PODLOVE_CONFIG_YOUTUBE_ID = "PODLOVE_YOUTUBE_ID";
+    const PODLOVE_CONFIG_ACTIVE_TAB = "PODLOVE_ACTIVE_TAB";
+    const PODLOVE_CONFIG_EMBEDDING = "PODLOVE_EMBEDDING";
+    const PODLOVE_CONFIG_THEME_COLORS = "PODLOVE_THEME_COLORS";
+    const PODLOVE_CONFIG_SHARE_CHANNELS = "PODLOVE_SHARE_CHANNELS";
+    const PODLOVE_CONFIG_SHARE_PLAYTIME = "PODLOVE_SHARE_PLAYTIME";
+    
     // VARIABLES
     
     protected static $PLAYER_BOOTSTRAP_CODE = array(); 
@@ -62,19 +79,19 @@
     }
 
     protected static function configure() {
-      Plugins::preset("FEED_URL", null);
-      Plugins::preset("APPLE_PODCAST_ID", null);
-      Plugins::preset("CASTBOX_ID", null);
-      Plugins::preset("DEEZER_ID", null);
-      Plugins::preset("SOUNDCLOUD_ID", null);
-      Plugins::preset("SPOTIFY_ID", null);
-      Plugins::preset("STITCHER_ID", null);
-      Plugins::preset("YOUTUBE_ID", null);
-      Plugins::preset("ACTIVE_TAB", null);
+      Plugins::preset(PODLOVE_CONFIG_FEED_URL, null);
+      Plugins::preset(PODLOVE_CONFIG_APPLE_PODCAST_ID, null);
+      Plugins::preset(PODLOVE_CONFIG_CASTBOX_ID, null);
+      Plugins::preset(PODLOVE_CONFIG_DEEZER_ID, null);
+      Plugins::preset(PODLOVE_CONFIG_SOUNDCLOUD_ID, null);
+      Plugins::preset(PODLOVE_CONFIG_SPOTIFY_ID, null);
+      Plugins::preset(PODLOVE_CONFIG_STITCHER_ID, null);
+      Plugins::preset(PODLOVE_CONFIG_YOUTUBE_ID, null);
+      Plugins::preset(PODLOVE_CONFIG_ACTIVE_TAB, null);
       
-      Plugins::preset("EMBEDDING", "/share.html");
+      Plugins::preset(PODLOVE_CONFIG_EMBEDDING, "/share.html");
       
-      Plugins::preset("THEME_COLORS", [
+      Plugins::preset(PODLOVE_CONFIG_THEME_COLORS, [
         "brand" => "#166255",
         "brandDark" => "#166255",
         "brandDarkest" => "#1A3A4A",
@@ -85,8 +102,8 @@
         "alt" => "#fff"
       ]);
       
-      Plugins::preset("SHARE_CHANNELS", ["facebook", "twitter", "mail", "link", "whats-app"]);
-      Plugins::preset("SHARE_PLAYTIME", true);
+      Plugins::preset(PODLOVE_CONFIG_SHARE_CHANNELS, ["facebook", "twitter", "mail", "link", "whats-app"]);
+      Plugins::preset(PODLOVE_CONFIG_SHARE_PLAYTIME, true);
       
     }
     
@@ -102,21 +119,21 @@
           # Base player configuration
           $config = [
             "base" => path2uri(__DIR__)."/lib/",
-            "activeTab" => Plugins::get("ACTIVE_TAB"),
+            "activeTab" => Plugins::get(PODLOVE_CONFIG_ACTIVE_TAB),
             "theme" => [
-              "tokens" => Plugins::get("THEME_COLORS")
+              "tokens" => Plugins::get(PODLOVE_CONFIG_THEME_COLORS)
             ],
             "share" => [
-              "channels" => Plugins::get("SHARE_CHANNELS"),
-              "sharePlaytime" => Plugins::get("SHARE_PLAYTIME"),
-              "outlet" => Plugins::get("EMBEDDING")
+              "channels" => Plugins::get(PODLOVE_CONFIG_SHARE_CHANNELS),
+              "sharePlaytime" => Plugins::get(PODLOVE_CONFIG_SHARE_PLAYTIME),
+              "outlet" => Plugins::get(PODLOVE_CONFIG_EMBEDDING)
             ]
           ];
           
           # Add subscribe button config
-          if(Plugins::get("FEED_URL")){
+          if(Plugins::get(PODLOVE_CONFIG_FEED_URL)){
             $subscribeButton = [
-              "feed" => Plugins::get("FEED_URL"),
+              "feed" => Plugins::get(PODLOVE_CONFIG_FEED_URL),
               "clients" => [
                 ["id" => "antenna-pod"],
                 ["id" => "beyond-pod"],
@@ -130,8 +147,8 @@
                 ["id" => "overcast"],
                 ["id" => "player-fm"],
                 ["id" => "pocket-casts"],
-                ["id" => "pocket-casts", "service" => Plugins::get("FEED_URL")],
-                ["id" => "google-podcasts", "service" => Plugins::get("FEED_URL")],
+                ["id" => "pocket-casts", "service" => Plugins::get(PODLOVE_CONFIG_FEED_URL)],
+                ["id" => "google-podcasts", "service" => Plugins::get(PODLOVE_CONFIG_FEED_URL)],
                 ["id" => "pod-grasp"],
                 ["id" => "podcast-addict"],
                 ["id" => "podcast-republic"],
@@ -141,26 +158,26 @@
                 ["id" => "rss"]
               ]
             ];
-            if(Plugins::get("APPLE_PODCAST_ID")){
-              $subscribeButton["clients"][] = ["id" => "apple-podcasts", "service" => Plugins::get("APPLE_PODCAST_ID")];
+            if(Plugins::get(PODLOVE_CONFIG_APPLE_PODCAST_ID)){
+              $subscribeButton["clients"][] = ["id" => "apple-podcasts", "service" => Plugins::get(PODLOVE_CONFIG_APPLE_PODCAST_ID)];
             }
-            if(Plugins::get("CASTBOX_ID")){
-              $subscribeButton["clients"][] = ["id" => "castbox", "service" => Plugins::get("CASTBOX_ID")];
+            if(Plugins::get(PODLOVE_CONFIG_CASTBOX_ID)){
+              $subscribeButton["clients"][] = ["id" => "castbox", "service" => Plugins::get(PODLOVE_CONFIG_CASTBOX_ID)];
             }
-            if(Plugins::get("DEEZER_ID")){
-              $subscribeButton["clients"][] = ["id" => "deezer", "service" => Plugins::get("DEEZER_ID")];
+            if(Plugins::get(PODLOVE_CONFIG_DEEZER_ID)){
+              $subscribeButton["clients"][] = ["id" => "deezer", "service" => Plugins::get(PODLOVE_CONFIG_DEEZER_ID)];
             } 
-            if(Plugins::get("SOUNDCLOUD_ID")){
-              $subscribeButton["clients"][] = ["id" => "soundcloud", "service" => Plugins::get("SOUNDCLOUD_ID")];
+            if(Plugins::get(PODLOVE_CONFIG_SOUNDCLOUD_ID)){
+              $subscribeButton["clients"][] = ["id" => "soundcloud", "service" => Plugins::get(PODLOVE_CONFIG_SOUNDCLOUD_ID)];
             }
-            if(Plugins::get("SPOTIFY_ID")){
-              $subscribeButton["clients"][] = ["id" => "spotify", "service" => Plugins::get("SPOTIFY_ID")];
+            if(Plugins::get(PODLOVE_CONFIG_SPOTIFY_ID)){
+              $subscribeButton["clients"][] = ["id" => "spotify", "service" => Plugins::get(PODLOVE_CONFIG_SPOTIFY_ID)];
             }
-            if(Plugins::get("STITCHER_ID")){
-              $subscribeButton["clients"][] = ["id" => "stitcher", "service" => Plugins::get("STITCHER_ID")];
+            if(Plugins::get(PODLOVE_CONFIG_STITCHER_ID)){
+              $subscribeButton["clients"][] = ["id" => "stitcher", "service" => Plugins::get(PODLOVE_CONFIG_STITCHER_ID)];
             }
-            if(Plugins::get("YOUTUBE_ID")){
-              $subscribeButton["clients"][] = ["id" => "youtube", "service" => Plugins::get("YOUTUBE_ID")];
+            if(Plugins::get(PODLOVE_CONFIG_YOUTUBE_ID)){
+              $subscribeButton["clients"][] = ["id" => "youtube", "service" => Plugins::get(PODLOVE_CONFIG_YOUTUBE_ID)];
             }
             $config["subscribe-button"] = $subscribeButton;
           }
