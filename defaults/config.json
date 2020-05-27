@@ -1,5 +1,5 @@
 {
-	"base": "//podlove.fm4f.org/",
+	"base": "/user/plugins/podloveplugin/lib/",
 	"activeTab": "chapters",
 	"theme": {
 		"tokens": {
@@ -132,7 +132,8 @@
 		]
 	},
 	"share": {
-		"channels": ["facebook", "twitter", "mail", "link"],
+		"channels": ["facebook", "twitter", "mail", "link", "whats-app"],
+		"outlet": "/share.html",
 		"sharePlaytime": true
 	}
 }
