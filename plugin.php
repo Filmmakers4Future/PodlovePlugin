@@ -119,7 +119,6 @@
           # Base player configuration
           $config = [
             "base" => path2uri(__DIR__)."/lib/",
-            "activeTab" => Plugins::get(PODLOVE_CONFIG_ACTIVE_TAB),
             "theme" => [
               "tokens" => Plugins::get(PODLOVE_CONFIG_THEME_COLORS)
             ],
@@ -129,6 +128,10 @@
               "outlet" => Plugins::get(PODLOVE_CONFIG_EMBEDDING)
             ]
           ];
+          
+          if(Plugins::get(PODLOVE_CONFIG_ACTIVE_TAB)){
+            $config["activeTab"] = Plugins::get(PODLOVE_CONFIG_ACTIVE_TAB);
+          }
           
           # Add subscribe button config
           if(Plugins::get(PODLOVE_CONFIG_FEED_URL)){
