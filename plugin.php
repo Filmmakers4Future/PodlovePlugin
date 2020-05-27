@@ -62,8 +62,32 @@
     }
 
     protected static function configure() {
-      // Player config file
-      Plugins::preset("CONFIG_FILE", __DIR__."/defaults/config.json");
+      Plugins::preset("FEED_URL", null);
+      Plugins::preset("APPLE_PODCAST_ID", null);
+      Plugins::preset("CASTBOX_ID", null);
+      Plugins::preset("DEEZER_ID", null);
+      Plugins::preset("SOUNDCLOUD_ID", null);
+      Plugins::preset("SPOTIFY_ID", null);
+      Plugins::preset("STITCHER_ID", null);
+      Plugins::preset("YOUTUBE_ID", null);
+      Plugins::preset("ACTIVE_TAB", null);
+      
+      Plugins::preset("EMBEDDING", "/share.html");
+      
+      Plugins::preset("THEME_COLORS", [
+        "brand" => "#166255",
+        "brandDark" => "#166255",
+        "brandDarkest" => "#1A3A4A",
+        "brandLightest" => "#E5EAECFF",
+        "shadeDark" => "#807E7C",
+        "shadeBase" => "#807E7C",
+        "contrast" => "#000",
+        "alt" => "#fff"
+      ]);
+      
+      Plugins::preset("SHARE_CHANNELS", ["facebook", "twitter", "mail", "link", "whats-app"]);
+      Plugins::preset("SHARE_PLAYTIME", true);
+      
     }
     
     protected static function getPodlovePlayer($item) {
@@ -74,6 +98,73 @@
 
       if (is_string($result)) {
         if (value($item, self::PODLOVE_AUDIOFILES) and value($item, self::PODLOVE_AUDIOMIME) and value($item, self::PODLOVE_AUDIOTITLES) and value($item, self::PODLOVE_AUDIOSIZES)) {
+          
+          # Base player configuration
+          $config = [
+            "base" => path2uri(__DIR__)."/lib/",
+            "activeTab" => Plugins::get("ACTIVE_TAB"),
+            "theme" => [
+              "tokens" => Plugins::get("THEME_COLORS")
+            ],
+            "share" => [
+              "channels" => Plugins::get("SHARE_CHANNELS"),
+              "sharePlaytime" => Plugins::get("SHARE_PLAYTIME"),
+              "outlet" => Plugins::get("EMBEDDING")
+            ]
+          ];
+          
+          # Add subscribe button config
+          if(Plugins::get("FEED_URL")){
+            $subscribeButton = [
+              "feed" => Plugins::get("FEED_URL"),
+              "clients" => [
+                ["id" => "antenna-pod"],
+                ["id" => "beyond-pod"],
+                ["id" => "castro"],
+                ["id" => "clementine"],
+                ["id" => "downcast"],
+                ["id" => "gpodder"],
+                ["id" => "itunes"],
+                ["id" => "i-catcher"],
+                ["id" => "instacast"],
+                ["id" => "overcast"],
+                ["id" => "player-fm"],
+                ["id" => "pocket-casts"],
+                ["id" => "pocket-casts", "service" => Plugins::get("FEED_URL")],
+                ["id" => "google-podcasts", "service" => Plugins::get("FEED_URL")],
+                ["id" => "pod-grasp"],
+                ["id" => "podcast-addict"],
+                ["id" => "podcast-republic"],
+                ["id" => "podcat"],
+                ["id" => "podscout"],
+                ["id" => "rss-radio"],
+                ["id" => "rss"]
+              ]
+            ];
+            if(Plugins::get("APPLE_PODCAST_ID")){
+              $subscribeButton["clients"][] = ["id" => "apple-podcasts", "service" => Plugins::get("APPLE_PODCAST_ID")];
+            }
+            if(Plugins::get("CASTBOX_ID")){
+              $subscribeButton["clients"][] = ["id" => "castbox", "service" => Plugins::get("CASTBOX_ID")];
+            }
+            if(Plugins::get("DEEZER_ID")){
+              $subscribeButton["clients"][] = ["id" => "deezer", "service" => Plugins::get("DEEZER_ID")];
+            } 
+            if(Plugins::get("SOUNDCLOUD_ID")){
+              $subscribeButton["clients"][] = ["id" => "soundcloud", "service" => Plugins::get("SOUNDCLOUD_ID")];
+            }
+            if(Plugins::get("SPOTIFY_ID")){
+              $subscribeButton["clients"][] = ["id" => "spotify", "service" => Plugins::get("SPOTIFY_ID")];
+            }
+            if(Plugins::get("STITCHER_ID")){
+              $subscribeButton["clients"][] = ["id" => "stitcher", "service" => Plugins::get("STITCHER_ID")];
+            }
+            if(Plugins::get("YOUTUBE_ID")){
+              $subscribeButton["clients"][] = ["id" => "youtube", "service" => Plugins::get("YOUTUBE_ID")];
+            }
+            $config["subscribe-button"] = $subscribeButton;
+          }
+          
           
           // Base episode configuration
           $episode = [
@@ -152,10 +243,6 @@
           $episode["audio"] = $audio;
           $episode["files"] = $files;
           $episode["chapters"] = $chapters;
-            
-          // Load config json from file and parse it
-          $configJSON = file_get_contents(Plugins::get("CONFIG_FILE"));
-          $configArray = json_decode($configJSON, true);
                  
           # Create random id for podlove webplayer div
           $divID =  "player_".substr(uniqid(rand(),1),0,15);
@@ -165,7 +252,7 @@
                                $divID);
                     
           # Add player bootstrap code to array to add after body
-          self::$PLAYER_BOOTSTRAP_CODE[] = 'window.podlovePlayer("#'.$divID.'", '.json_encode($episode).', '.json_encode($configArray).');';
+          self::$PLAYER_BOOTSTRAP_CODE[] = 'window.podlovePlayer("#'.$divID.'", '.json_encode($episode, JSON_UNESCAPED_SLASHES).', '.json_encode($config, JSON_UNESCAPED_SLASHES).');';
                                 
           // replace shortcode with podlove player div
           $result = str_ireplace(static::PODLOVEWEBPLAYER, $podloveplayer, $result);
