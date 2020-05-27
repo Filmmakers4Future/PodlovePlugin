@@ -45,9 +45,21 @@
     
     // VARIABLES
     
-    public static $PLAYER_BOOTSTRAP_CODE = array(); 
+    protected static $PLAYER_BOOTSTRAP_CODE = array(); 
 
     // HELPER FUNCTIONS
+    
+    public static function bootstrapPlayer() {
+      print(fhtml("<!-- Podlove Webplayer Library -->").NL);
+      print(fhtml("<script src='".path2uri(__DIR__."/lib/embed.js")."'></script>").NL);
+      print(fhtml("<!-- Podlove Webplayer Boostraping -->").NL);
+      print(fhtml("<script>"));
+      foreach (self::$PLAYER_BOOTSTRAP_CODE as $player) {
+        print(fhtml($player).NL);
+      }
+      print(fhtml("</script>"));
+      print(NL);
+    }
 
     protected static function configure() {
       // Player config file
@@ -151,16 +163,9 @@
           # Create div for podlove webplayer
           $podloveplayer = fhtml("<div id=\"%s\" class=\"align-content-center\"></div>".NL,
                                $divID);
-
-          # Old code block:                  
-          # Add script to load podlove webplayer with our configuration                  
-          //$podloveplayer .= fhtml("<script>");
-          // Better way to do this? Could not use fhtml since it invalidates the json data
-          //$podloveplayer .= 'window.addEventListener("load",function(){window.podlovePlayer("#'.$divID.'", '.json_encode($episode).', '.json_encode($configArray).')},false);';
-          //$podloveplayer .= fhtml("</script>");
                     
-          // Add player bootstrap code to array to add after body
-          $PLAYER_BOOTSTRAP_CODE[] = 'window.podlovePlayer("#'.$divID.'", '.json_encode($episode).', '.json_encode($configArray).');';
+          # Add player bootstrap code to array to add after body
+          self::$PLAYER_BOOTSTRAP_CODE[] = 'window.podlovePlayer("#'.$divID.'", '.json_encode($episode).', '.json_encode($configArray).');';
                                 
           // replace shortcode with podlove player div
           $result = str_ireplace(static::PODLOVEWEBPLAYER, $podloveplayer, $result);
@@ -196,19 +201,7 @@
     }
 
   }
-  
-  function bootstrapPlayer() {
-    print(fhtml("<!-- Podlove Webplayer Library -->").NL);
-    print(fhtml("<script src='".path2uri(__DIR__."/lib/embed.js")."'></script>").NL);
-    print(fhtml("<!-- Podlove Webplayer Boostraping -->").NL);
-    print(fhtml("<script>"))
-    foreach (PodlovePlayerPlugin::$PLAYER_BOOTSTRAP_CODE as $player) {
-      print($player.NL);
-    }
-    print(fhtml("</script>"))
-    print(NL);
-  }
 
   // register plugin
   Plugins::register(PodlovePlayerPlugin::class, "plugin", FILTER_CONTENT);
-  Plugins::register(null, "bootstrapPlayer", AFTER_BODY);
+  Plugins::register(PodlovePlayerPlugin::class, "bootstrapPlayer", AFTER_BODY);
