@@ -42,6 +42,10 @@
     const PODLOVE_CHAPTERSTARTS= "podlove_chapterStarts";
     const PODLOVE_CHAPTERLINKS = "podlove_chapterLinks";
     const PODLOVE_CHAPTERIMAGES = "podlove_chapterImages";
+    
+    // VARIABLES
+    
+    public static $PLAYER_BOOTSTRAP_CODE = array(); 
 
     // HELPER FUNCTIONS
 
@@ -57,7 +61,7 @@
       $result = value($item, CONTENT);
 
       if (is_string($result)) {
-        if (value($item, self::PODLOVE_AUDIOFILES)) {
+        if (value($item, self::PODLOVE_AUDIOFILES) and value($item, self::PODLOVE_AUDIOMIME) and value($item, self::PODLOVE_AUDIOTITLES) and value($item, self::PODLOVE_AUDIOSIZES)) {
           
           // Base episode configuration
           $episode = [
@@ -111,22 +115,26 @@
           };
           
           // Add download files to files array
-          foreach($downloadFiles as $i => $downloadFile) {
-            $files[] = ["url" => $downloadFile,
-                        "size" => $downloadSizes[$i],
-                        "title" => $downloadTitles[$i],
-                        "mimeType" => $downloadMimeTypes[$i]
-                        ];
-          };
+          if(value($item, self::PODLOVE_DOWNLOADFILES)){
+            foreach($downloadFiles as $i => $downloadFile) {
+              $files[] = ["url" => $downloadFile,
+                          "size" => $downloadSizes[$i],
+                          "title" => $downloadTitles[$i],
+                          "mimeType" => $downloadMimeTypes[$i]
+                          ];
+            };
+          }
           
           // Add chapters to chapter array
-          foreach($chapterTitles as $i => $chapterTitle) {
-            $chapters[] = ["title" => $chapterTitle,
-                        "start" => $chapterStarts[$i],
-                        "href" => $chapterLinks[$i],
-                        "image" => $chapterImages[$i]
-                        ];
-          };
+          if(value($item, self::PODLOVE_CHAPTERTITLES)){
+            foreach($chapterTitles as $i => $chapterTitle) {
+              $chapters[] = ["title" => $chapterTitle,
+                          "start" => $chapterStarts[$i],
+                          "href" => $chapterLinks[$i],
+                          "image" => $chapterImages[$i]
+                          ];
+            };
+          }
           
           // Add new config arrays to episode array
           $episode["audio"] = $audio;
@@ -144,13 +152,17 @@
           $podloveplayer = fhtml("<div id=\"%s\" class=\"align-content-center\"></div>".NL,
                                $divID);
 
+          # Old code block:                  
           # Add script to load podlove webplayer with our configuration                  
-          $podloveplayer .= fhtml("<script>");
+          //$podloveplayer .= fhtml("<script>");
           // Better way to do this? Could not use fhtml since it invalidates the json data
-          $podloveplayer .= 'window.addEventListener("load",function(){window.podlovePlayer("#'.$divID.'", '.json_encode($episode).', '.json_encode($configArray).')},false);';
-          $podloveplayer .= fhtml("</script>");
+          //$podloveplayer .= 'window.addEventListener("load",function(){window.podlovePlayer("#'.$divID.'", '.json_encode($episode).', '.json_encode($configArray).')},false);';
+          //$podloveplayer .= fhtml("</script>");
+                    
+          // Add player bootstrap code to array to add after body
+          $PLAYER_BOOTSTRAP_CODE[] = 'window.podlovePlayer("#'.$divID.'", '.json_encode($episode).', '.json_encode($configArray).');';
                                 
-          // replace shortcode with podlove player
+          // replace shortcode with podlove player div
           $result = str_ireplace(static::PODLOVEWEBPLAYER, $podloveplayer, $result);
         }
       }
@@ -184,6 +196,19 @@
     }
 
   }
+  
+  function bootstrapPlayer() {
+    print(fhtml("<!-- Podlove Webplayer Library -->").NL);
+    print(fhtml("<script src='".path2uri(__DIR__."/lib/embed.js")."'></script>").NL);
+    print(fhtml("<!-- Podlove Webplayer Boostraping -->").NL);
+    print(fhtml("<script>"))
+    foreach (PodlovePlayerPlugin::$PLAYER_BOOTSTRAP_CODE as $player) {
+      print($player.NL);
+    }
+    print(fhtml("</script>"))
+    print(NL);
+  }
 
   // register plugin
   Plugins::register(PodlovePlayerPlugin::class, "plugin", FILTER_CONTENT);
+  Plugins::register(null, "bootstrapPlayer", AFTER_BODY);
