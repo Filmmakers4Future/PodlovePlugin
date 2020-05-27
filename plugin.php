@@ -19,6 +19,8 @@
   class PodlovePlayerPlugin extends BaseSingleton implements Plugin {
 
     // CONSTANTS
+    
+    const PODLOVEWEBPLAYER = "[podloveplayer]";
 
     const PODLOVE_AUDIOFILES = "podlove_audioFiles";
     const PODLOVE_PODCASTTITLE = "podlove_podcastTitle";
@@ -43,42 +45,50 @@
 
     // HELPER FUNCTIONS
 
+    protected static function configure() {
+      // Player config file
+      Plugins::preset("CONFIG_FILE", __DIR__."/defaults/config.json");
+    }
+    
     protected static function getPodlovePlayer($item) {
+      // preset plugin configuration
+      static::configure();
+        
       $result = value($item, CONTENT);
 
       if (is_string($result)) {
-        if (value($item, PODLOVE_AUDIOFILES)) {
+        if (value($item, self::PODLOVE_AUDIOFILES)) {
           
           // Base episode configuration
           $episode = [
             "version" => "5",
             "show" => [
-              "title" => value($item, PODLOVE_PODCASTTITLE),
-              "link" => value($item, PODLOVE_PODCASTLINK)
+              "title" => value($item, self::PODLOVE_PODCASTTITLE),
+              "link" => value($item, self::PODLOVE_PODCASTLINK)
             ],
-            "title" => value($item, PODLOVE_TITLE),
-            "poster" => value($item, PODLOVE_POSTER),
-            "duration" => value($item, PODLOVE_DURATION),
+            "title" => value($item, self::PODLOVE_TITLE),
+            "poster" => value($item, self::PODLOVE_POSTER),
+            "duration" => value($item, self::PODLOVE_DURATION),
             "link" => absoluteurl(value($item, URI))
           ];
           
           // Parse audio files from markdown
-          $audioFiles = explode(",", value($item, PODLOVE_AUDIOFILES));
-          $audioSizes = explode(",", value($item, PODLOVE_AUDIOSIZES));
-          $audioTitles = explode(",", value($item, PODLOVE_AUDIOTITLES));
-          $audioMimeTypes = explode(",", value($item, PODLOVE_AUDIOMIME));
+          $audioFiles = explode(",", value($item, self::PODLOVE_AUDIOFILES));
+          $audioSizes = explode(",", value($item, self::PODLOVE_AUDIOSIZES));
+          $audioTitles = explode(",", value($item, self::PODLOVE_AUDIOTITLES));
+          $audioMimeTypes = explode(",", value($item, self::PODLOVE_AUDIOMIME));
           
           // Parse download files from markdown (optional)
-          $downloadFiles = explode(",", value($item, PODLOVE_DOWNLOADFILES));
-          $downloadSizes = explode(",", value($item, PODLOVE_DOWNLOADSIZES));
-          $downloadTitles = explode(",", value($item, PODLOVE_DOWNLOADTITLES));
-          $downloadMimeTypes = explode(",", value($item, PODLOVE_DOWNLOADMIME));
+          $downloadFiles = explode(",", value($item, self::PODLOVE_DOWNLOADFILES));
+          $downloadSizes = explode(",", value($item, self::PODLOVE_DOWNLOADSIZES));
+          $downloadTitles = explode(",", value($item, self::PODLOVE_DOWNLOADTITLES));
+          $downloadMimeTypes = explode(",", value($item, self::PODLOVE_DOWNLOADMIME));
           
           // Parse chapters from markdown (optional)
-          $chapterTitles = explode(",", value($item, PODLOVE_CHAPTERTITLES));
-          $chapterStarts = explode(",", value($item, PODLOVE_CHAPTERSTARTS));
-          $chapterLinks = explode(",", value($item, PODLOVE_CHAPTERLINKS));
-          $chapterImages = explode(",", value($item, PODLOVE_CHAPTERIMAGES));
+          $chapterTitles = explode(",", value($item, self::PODLOVE_CHAPTERTITLES));
+          $chapterStarts = explode(",", value($item, self::PODLOVE_CHAPTERSTARTS));
+          $chapterLinks = explode(",", value($item, self::PODLOVE_CHAPTERLINKS));
+          $chapterImages = explode(",", value($item, self::PODLOVE_CHAPTERIMAGES));
           
           // Create arrays for data
           $audio = array();
@@ -124,7 +134,7 @@
           $episode["chapters"] = $chapters;
             
           // Load config json from file and parse it
-          $configJSON = file_get_contents(__DIR__."/defaults/config.json");
+          $configJSON = file_get_contents(Plugins::get("CONFIG_FILE"));
           $configArray = json_decode($configJSON, true);
                  
           # Create random id for podlove webplayer div
@@ -141,7 +151,7 @@
           $podloveplayer .= fhtml("</script>");
                                 
           // replace shortcode with podlove player
-          $result = str_ireplace("[podloveplayer]", $podloveplayer, $result);
+          $result = str_ireplace(static::PODLOVEWEBPLAYER, $podloveplayer, $result);
         }
       }
 
