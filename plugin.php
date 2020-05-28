@@ -118,6 +118,7 @@
           
           # Base player configuration
           $config = [
+            "version" => 5,
             "base" => path2uri(__DIR__)."/lib/",
             "theme" => [
               "tokens" => Plugins::get(PODLOVE_CONFIG_THEME_COLORS)
@@ -188,7 +189,7 @@
           
           // Base episode configuration
           $episode = [
-            "version" => "5",
+            "version" => 5,
             "show" => [
               "title" => value($item, self::PODLOVE_PODCASTTITLE),
               "link" => value($item, self::PODLOVE_PODCASTLINK)
