@@ -79,31 +79,20 @@
     }
 
     protected static function configure() {
-      Plugins::preset(PODLOVE_CONFIG_FEED_URL, null);
-      Plugins::preset(PODLOVE_CONFIG_APPLE_PODCAST_ID, null);
-      Plugins::preset(PODLOVE_CONFIG_CASTBOX_ID, null);
-      Plugins::preset(PODLOVE_CONFIG_DEEZER_ID, null);
-      Plugins::preset(PODLOVE_CONFIG_SOUNDCLOUD_ID, null);
-      Plugins::preset(PODLOVE_CONFIG_SPOTIFY_ID, null);
-      Plugins::preset(PODLOVE_CONFIG_STITCHER_ID, null);
-      Plugins::preset(PODLOVE_CONFIG_YOUTUBE_ID, null);
-      Plugins::preset(PODLOVE_CONFIG_ACTIVE_TAB, null);
+      Plugins::preset(static::PODLOVE_CONFIG_FEED_URL, null);
+      Plugins::preset(static::PODLOVE_CONFIG_APPLE_PODCAST_ID, null);
+      Plugins::preset(static::PODLOVE_CONFIG_CASTBOX_ID, null);
+      Plugins::preset(static::PODLOVE_CONFIG_DEEZER_ID, null);
+      Plugins::preset(static::PODLOVE_CONFIG_SOUNDCLOUD_ID, null);
+      Plugins::preset(static::PODLOVE_CONFIG_SPOTIFY_ID, null);
+      Plugins::preset(static::PODLOVE_CONFIG_STITCHER_ID, null);
+      Plugins::preset(static::PODLOVE_CONFIG_YOUTUBE_ID, null);
+      Plugins::preset(static::PODLOVE_CONFIG_ACTIVE_TAB, null);
       
-      Plugins::preset(PODLOVE_CONFIG_EMBEDDING, "/share.html");
+      Plugins::preset(static::PODLOVE_CONFIG_EMBEDDING, "/share.html");
       
-      Plugins::preset(PODLOVE_CONFIG_THEME_COLORS, [
-        "brand" => "#166255",
-        "brandDark" => "#166255",
-        "brandDarkest" => "#1A3A4A",
-        "brandLightest" => "#E5EAECFF",
-        "shadeDark" => "#807E7C",
-        "shadeBase" => "#807E7C",
-        "contrast" => "#000",
-        "alt" => "#fff"
-      ]);
-      
-      Plugins::preset(PODLOVE_CONFIG_SHARE_CHANNELS, ["twitter", "facebook", "whats-app", "mail", "link"]);
-      Plugins::preset(PODLOVE_CONFIG_SHARE_PLAYTIME, true);
+      Plugins::preset(static::PODLOVE_CONFIG_SHARE_CHANNELS, ["twitter", "facebook", "whats-app", "mail", "link"]);
+      Plugins::preset(static::PODLOVE_CONFIG_SHARE_PLAYTIME, true);
       
     }
     
