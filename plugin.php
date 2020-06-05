@@ -48,7 +48,9 @@
     // config 
     const PODLOVE_CONFIG_FEED_URL = "PODLOVE_FEED_URL";
     const PODLOVE_CONFIG_APPLE_PODCAST_ID = "PODLOVE_APPLE_PODCAST_ID";
+    const PODLOVE_CONFIG_GOOGLE_PODCAST = "PODLOVE_GOOGLE_PODCAST";
     const PODLOVE_CONFIG_CASTBOX_ID = "PODLOVE_CASTBOX_ID";
+    const PODLOVE_CONFIG_POCKET_CASTS = "PODLOVE_POCKET_CASTS";
     const PODLOVE_CONFIG_DEEZER_ID = "PODLOVE_DEEZER_ID";
     const PODLOVE_CONFIG_SOUNDCLOUD_ID = "PODLOVE_SOUNDCLOUD_ID";
     const PODLOVE_CONFIG_SPOTIFY_ID = "PODLOVE_SPOTIFY_ID";
@@ -82,6 +84,7 @@
       Plugins::preset(static::PODLOVE_CONFIG_FEED_URL, null);
       Plugins::preset(static::PODLOVE_CONFIG_APPLE_PODCAST_ID, null);
       Plugins::preset(static::PODLOVE_CONFIG_CASTBOX_ID, null);
+      Plugins::preset(static::PODLOVE_CONFIG_POCKET_CASTS, null);
       Plugins::preset(static::PODLOVE_CONFIG_DEEZER_ID, null);
       Plugins::preset(static::PODLOVE_CONFIG_SOUNDCLOUD_ID, null);
       Plugins::preset(static::PODLOVE_CONFIG_SPOTIFY_ID, null);
@@ -130,7 +133,6 @@
               "clients" => [
                 ["id" => "antenna-pod"],
                 ["id" => "beyond-pod"],
-                ["id" => "castro"],
                 ["id" => "clementine"],
                 ["id" => "downcast"],
                 ["id" => "gpodder"],
@@ -139,9 +141,6 @@
                 ["id" => "instacast"],
                 ["id" => "overcast"],
                 ["id" => "player-fm"],
-                ["id" => "pocket-casts"],
-                ["id" => "pocket-casts", "service" => Plugins::get(static::PODLOVE_CONFIG_FEED_URL)],
-                ["id" => "google-podcasts", "service" => Plugins::get(static::PODLOVE_CONFIG_FEED_URL)],
                 ["id" => "pod-grasp"],
                 ["id" => "podcast-addict"],
                 ["id" => "podcast-republic"],
@@ -153,6 +152,7 @@
             ];
             if(Plugins::get(static::PODLOVE_CONFIG_APPLE_PODCAST_ID)){
               $subscribeButton["clients"][] = ["id" => "apple-podcasts", "service" => Plugins::get(static::PODLOVE_CONFIG_APPLE_PODCAST_ID)];
+              $subscribeButton["clients"][] = ["id" => "castro", "service" => Plugins::get(static::PODLOVE_CONFIG_APPLE_PODCAST_ID)];
             }
             if(Plugins::get(static::PODLOVE_CONFIG_CASTBOX_ID)){
               $subscribeButton["clients"][] = ["id" => "castbox", "service" => Plugins::get(static::PODLOVE_CONFIG_CASTBOX_ID)];
@@ -172,6 +172,23 @@
             if(Plugins::get(static::PODLOVE_CONFIG_YOUTUBE_ID)){
               $subscribeButton["clients"][] = ["id" => "youtube", "service" => Plugins::get(static::PODLOVE_CONFIG_YOUTUBE_ID)];
             }
+            if(Plugins::get(static::PODLOVE_CONFIG_GOOGLE_PODCAST)){
+              if (Plugins::get(static::PODLOVE_CONFIG_GOOGLE_PODCAST) === True) {
+                $subscribeButton["clients"][] = ["id" => "google-podcasts", "service" => Plugins::get(static::PODLOVE_CONFIG_FEED_URL)];
+              } else {
+                $subscribeButton["clients"][] = ["id" => "google-podcasts", "service" => Plugins::get(static::PODLOVE_CONFIG_GOOGLE_PODCAST)];
+              }
+            }
+            if(Plugins::get(static::PODLOVE_CONFIG_POCKET_CASTS)){
+              if (Plugins::get(static::PODLOVE_CONFIG_POCKET_CASTS) === True) {
+                $subscribeButton["clients"][] = ["id" => "pocket-casts", "service" => Plugins::get(static::PODLOVE_CONFIG_FEED_URL)];
+              } else {
+                $subscribeButton["clients"][] = ["id" => "pocket-casts", "service" => Plugins::get(static::PODLOVE_CONFIG_POCKET_CASTS)];
+              }
+            }
+            usort($subscribeButton["clients"], function ($item1, $item2) {
+              return $item1['id'] <=> $item2['id'];
+            });
             $config["subscribe-button"] = $subscribeButton;
           }
           

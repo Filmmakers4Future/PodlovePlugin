@@ -17,7 +17,16 @@ A few services require additional information besides a feed:
 
 ```php
 // https://podcasts.apple.com/podcast/[id]
+// Also adds Castro as it uses the same ID
 Plugins::set("PODLOVE_APPLE_PODCAST_ID", null);
+
+// TRUE or URL to podcast feed. TRUE uses PODLOVE_FEED_URL.
+// Submit Podcast to Google at https://podcastsmanager.google.com
+Plugins::set("PODLOVE_GOOGLE_PODCAST", null);
+
+// TRUE or URL to podcast feed. TRUE uses PODLOVE_FEED_URL.
+// Submit Podcast at: https://www.pocketcasts.com/submit/
+Plugins::set("PODLOVE_POCKET_CASTS", null);
 
 // https://www.deezer.com/en/show/[id]
 Plugins::set("PODLOVE_DEEZER_ID", null);
