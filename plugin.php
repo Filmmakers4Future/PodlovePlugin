@@ -69,15 +69,17 @@
     // HELPER FUNCTIONS
     
     public static function bootstrapPlayer() {
-      print(fhtml("<!-- Podlove Webplayer Library -->").NL);
-      print(fhtml("<script src='".path2uri(__DIR__."/lib/embed.js")."'></script>").NL);
-      print(fhtml("<!-- Podlove Webplayer Boostraping -->").NL);
-      print(fhtml("<script>"));
-      foreach (self::$PLAYER_BOOTSTRAP_CODE as $player) {
-        print(fhtml($player).NL);
+      if (!empty(self::$PLAYER_BOOTSTRAP_CODE)){
+        print(fhtml("<!-- Podlove Webplayer Library -->").NL);
+        print(fhtml("<script src='".path2uri(__DIR__."/lib/embed.js")."'></script>").NL);
+        print(fhtml("<!-- Podlove Webplayer Boostraping -->").NL);
+        print(fhtml("<script>"));
+        foreach (self::$PLAYER_BOOTSTRAP_CODE as $player) {
+          print(fhtml($player).NL);
+        }
+        print(fhtml("</script>"));
+        print(NL);
       }
-      print(fhtml("</script>"));
-      print(NL);
     }
 
     protected static function configure() {
