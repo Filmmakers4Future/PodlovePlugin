@@ -215,16 +215,16 @@
           $audioMimeTypes = explode(",", value($item, self::PODLOVE_AUDIOMIME));
           
           // Parse download files from markdown (optional)
-          $downloadFiles = explode(",", value($item, self::PODLOVE_DOWNLOADFILES));
-          $downloadSizes = explode(",", value($item, self::PODLOVE_DOWNLOADSIZES));
-          $downloadTitles = explode(",", value($item, self::PODLOVE_DOWNLOADTITLES));
-          $downloadMimeTypes = explode(",", value($item, self::PODLOVE_DOWNLOADMIME));
+          $downloadFiles = explode(",", (string) value($item, self::PODLOVE_DOWNLOADFILES));
+          $downloadSizes = explode(",", (string) value($item, self::PODLOVE_DOWNLOADSIZES));
+          $downloadTitles = explode(",", (string) value($item, self::PODLOVE_DOWNLOADTITLES));
+          $downloadMimeTypes = explode(",", (string) value($item, self::PODLOVE_DOWNLOADMIME));
           
           // Parse chapters from markdown (optional)
-          $chapterTitles = explode(",", value($item, self::PODLOVE_CHAPTERTITLES));
-          $chapterStarts = explode(",", value($item, self::PODLOVE_CHAPTERSTARTS));
-          $chapterLinks = explode(",", value($item, self::PODLOVE_CHAPTERLINKS));
-          $chapterImages = explode(",", value($item, self::PODLOVE_CHAPTERIMAGES));
+          $chapterTitles = explode(",", (string) value($item, self::PODLOVE_CHAPTERTITLES));
+          $chapterStarts = explode(",", (string) value($item, self::PODLOVE_CHAPTERSTARTS));
+          $chapterLinks = explode(",", (string) value($item, self::PODLOVE_CHAPTERLINKS));
+          $chapterImages = explode(",", (string) value($item, self::PODLOVE_CHAPTERIMAGES));
           
           // Create arrays for data
           $audio = array();
@@ -260,10 +260,11 @@
           // Add chapters to chapter array
           if(value($item, self::PODLOVE_CHAPTERTITLES)){
             foreach($chapterTitles as $i => $chapterTitle) {
+              
               $chapters[] = ["title" => $chapterTitle,
                           "start" => $chapterStarts[$i],
-                          "href" => $chapterLinks[$i],
-                          "image" => $chapterImages[$i]
+                          "href" => $chapterLinks[$i]  ?? null,
+                          "image" => $chapterImages[$i] ?? null
                           ];
             };
           }
